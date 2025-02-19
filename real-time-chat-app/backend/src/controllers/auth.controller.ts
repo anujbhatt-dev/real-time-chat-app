@@ -95,6 +95,8 @@ export const logout = (req:Request,res:Response)=>{
 
 export const uploadProfile = async(req:Request,res:Response) =>{
     try {
+        console.log(req.body);
+        
         const {profilePic} = req.body;
         const userId = req.user?.id
     

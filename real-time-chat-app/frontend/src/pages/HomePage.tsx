@@ -1,10 +1,12 @@
-import React from 'react'
+import Sidemenu from '../components/Sidemenu'
 
 type Props = {}
 
 function HomePage({}: Props) {
   return (
-    <div>HomePage</div>
+    <div className='flex '>
+          <Sidemenu/>
+    </div>
   )
 }
 

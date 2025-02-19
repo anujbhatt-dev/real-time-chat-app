@@ -8,7 +8,7 @@ router.post('/signup', signup as RequestHandler)
 
 router.post('/login', login as RequestHandler)
 
-router.post('/logout', logout)
+router.get('/logout', logout)
 
 router.put('/update-profle', protectedRoute as RequestHandler , uploadProfile as RequestHandler)
 
