@@ -9,7 +9,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-base-100 text-base-content flex justify-center items-center h-[4rem]">
+    <nav className="bg-base-100 text-base-content flex justify-center items-center h-[4rem]  border-b border-black">
       <div className="max-w-7xl mx-auto flex justify-between items-center flex-grow">
         {/* Logo */}
         <div className="text-xl font-bold">
