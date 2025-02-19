@@ -32,7 +32,7 @@ export const signup = async (req: Request, res: Response) => {
             fullname,
             email,
             password: hashedPassword,
-            profilePic: profilePic || 'user' // Default to 'user' if no profilePic is provided
+            profilePic: profilePic || '' // Default to '' if no profilePic is provided
         });
         
         // Generate JWT token for the user
