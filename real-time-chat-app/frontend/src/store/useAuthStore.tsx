@@ -1,11 +1,8 @@
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
+import { IUser } from "../types";
 
-type User = {
-  fullname: string;
-  email: string;
-  password: string;
-};
+type User = IUser
 
 type AuthState = {
   authUser: User | null;

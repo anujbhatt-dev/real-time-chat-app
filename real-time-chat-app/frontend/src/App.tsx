@@ -29,7 +29,7 @@ function App({}: Props) {
 
 
   return (
-    <div data-theme={themeName} className='min-h-screen'>
+    <div data-theme={themeName} className='h-screen overflow-hidden'>
         <Navbar/>
         <Routes>
           <Route path="/" element={authUser?<HomePage/>:<Navigate to="/login"/>}/>

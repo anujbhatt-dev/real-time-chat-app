@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import { MessageCircle } from "lucide-react";
 
 const Navbar = () => {
   const { authUser, logout } = useAuthStore(); // Get the authUser state from your store and logout action
@@ -12,7 +13,8 @@ const Navbar = () => {
     <nav className="bg-base-100 text-base-content flex justify-center items-center h-[4rem]  border-b border-black">
       <div className="max-w-7xl mx-auto flex justify-between items-center flex-grow">
         {/* Logo */}
-        <div className="text-xl font-bold">
+        <div className="text-xl font-bold flex justify-center items-center gap-x-2">
+        <MessageCircle className="text-blue-500" size={32}/>
           <Link to="/" className="hover:text-primary">
             MyApp
           </Link>

@@ -40,6 +40,7 @@ export enum Theme {
     text?: string;
     image?: string;
     createdAt: string;  // ISO 8601 format date string, since frontend usually deals with date as a string
+    _id:string
 }
 
 export interface IUser {
@@ -50,6 +51,7 @@ export interface IUser {
     profilePic: string;
     createdAt: string;  // ISO 8601 date string
     updatedAt: string;  // ISO 8601 date string
+    _id:string
 }
 
   
