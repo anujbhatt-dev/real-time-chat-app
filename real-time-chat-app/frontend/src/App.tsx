@@ -13,10 +13,12 @@ import { useThemeStore } from './store/useThemeStore'
 type Props = {}
 
 function App({}: Props) {
-  const {checkAuth, authUser, isCheckingAuth} = useAuthStore()
+  const {checkAuth, authUser, isCheckingAuth, onlineUsers} = useAuthStore()
   const {themeName} = useThemeStore()
   useEffect(()=>{    
     checkAuth();
+    console.log({onlineUsers});
+    
   },[checkAuth])
 
   if(isCheckingAuth) return (

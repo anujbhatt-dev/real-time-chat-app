@@ -1,13 +1,14 @@
-import express from 'express'
+import express from "express"
 import authRoutes from "./routes/auth.route"
 import messageRoutes from "./routes/message.route"
 import dotenv from 'dotenv'
 import { db } from './lib/db'
 import cookieParser from 'cookie-parser'
 import cors from "cors"
+import { app, server } from "./lib/socket"
 dotenv.config()
 
-const app = express()
+
 const PORT =  process.env.PORT || 8080
 
 
@@ -23,7 +24,7 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     console.log("running on PORT: "+ PORT);
     db()
 })
