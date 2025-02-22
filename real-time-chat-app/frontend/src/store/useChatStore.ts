@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import { IMessage, IUser } from "../types"
 import axiosInstance from "../lib/axios"
+import { useAuthStore } from "./useAuthStore"
 
 
 type ChatI = {
@@ -15,7 +16,9 @@ type ChatAcions = {
     getUsers: ()=>void
     getMessages: (userToChatId:string)=>void
     setSelectedUser: (user:IUser) => void
-    sendMessage: (id:string) => void
+    sendMessage: (text:string,image:string) => void,
+    subscripbeToNewMessage:()=>void
+    unsubscripbeToNewMessage:()=>void
 }
 
 
@@ -65,19 +68,46 @@ export const useChatStore = create<ChatI & ChatAcions>((set,get)=>({
         }
     },
 
-    sendMessage: async (text:string)=>{
-        const {selectedUser} =get()
-        set({isMessagesLoading:true})        
+    sendMessage: async (text: string,image:string) => {
+        const { selectedUser } = get();
+        set({ isMessagesLoading: true });
+        console.log("here");
+        
         try {
-            const res = await axiosInstance.post(`/messages/send/${selectedUser?._id}`,{
-                text
-            })            
-            set({})            
+            const res = await axiosInstance.post(`/messages/send/${selectedUser?._id}`, {
+                text, image
+            });
+            set((state) => ({
+                messages: state.messages ? [...state.messages, res.data.newMessage] : [res.data.newMessage],
+            }));
         } catch (error) {
-            console.error("Error while fetch conversation:", error);
+            console.error("Error while sending message:", error);
         } finally {
-            set({isMessagesLoading:false})
+            set({ isMessagesLoading: false });
         }
+    },
+    
+
+
+    subscripbeToNewMessage: () => {
+        const { selectedUser } = get();
+        if (!selectedUser) return;
+    
+        const socket = useAuthStore.getState().socket;
+    
+        socket?.on('newMessage', (newMessage) => {
+            if (newMessage.senderId !== selectedUser._id) return;
+            set((state) => ({
+                messages: state.messages ? [...state.messages, newMessage] : [newMessage],
+            }));
+        });
+    },
+    
+
+
+    unsubscripbeToNewMessage:()=>{
+        const socket = useAuthStore.getState().socket;
+        socket?.off('newMessage')
     },
 
 }))

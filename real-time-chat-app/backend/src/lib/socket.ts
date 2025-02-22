@@ -18,6 +18,11 @@ type IUserSocketMap = {
 
 const userSocketMap: IUserSocketMap = {};
 
+
+export const getSocketdByUserId = (userId:string) => {
+    return userSocketMap[userId]
+}
+
 io.on("connection", (socket) => {
   // Ensure userId is a string, not a string[]
   const userId = Array.isArray(socket.handshake.query.userId)
@@ -32,12 +37,13 @@ io.on("connection", (socket) => {
   console.log("A user connected:", socket.id, userId);
   userSocketMap[userId] = socket.id;
 
-  io.emit('getOnlineUser',Object.keys(userSocketMap))
+  // Emit to all clients the updated online users
+  io.emit('getOnlineUsers', Object.keys(userSocketMap)); // Changed event name here
 
   socket.on("disconnect", () => {
     console.log("A user disconnected:", socket.id);
     delete userSocketMap[userId];
-    io.emit('getOnlineUsers',Object.keys(userSocketMap))
+    io.emit('getOnlineUsers', Object.keys(userSocketMap)); // Emit again on disconnect
   });
 });
 

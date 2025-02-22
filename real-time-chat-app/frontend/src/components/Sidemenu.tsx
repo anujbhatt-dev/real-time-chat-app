@@ -1,19 +1,21 @@
 import { useEffect } from 'react'
 import { useChatStore } from '../store/useChatStore'
 import { MessageCircle } from 'lucide-react'
+import { useAuthStore } from '../store/useAuthStore'
 
 type Props = {}
 
 function Sidemenu({}: Props) {
-const {users, isUserLoading, getUsers, setSelectedUser} = useChatStore()
+const {users, isUserLoading, getUsers, setSelectedUser, } = useChatStore()
+const {onlineUsers} = useAuthStore()
 
-  useEffect(()=>{
-    
-    getUsers()
-    
+  useEffect(()=>{    
+    getUsers()    
   },[getUsers])
   
   if(isUserLoading) return <div>Loading...</div>
+
+
 
   return (
     <div className='h-full w-[25rem]  border-r border-black/30'>
@@ -25,9 +27,10 @@ const {users, isUserLoading, getUsers, setSelectedUser} = useChatStore()
             show online users
         </div>
         {users?.map((user)=>(
-            <div onClick={()=>setSelectedUser(user)} key={user.email} className='flex justify-between items-center gap-2 mb-2 p-1 px-2 border-b border-black/30 cursor-pointer'>
-
-                <div className='h-[4rem] w-[4rem] rounded-full'>
+            <div onClick={()=>setSelectedUser(user)} key={user.email} className='flex justify-between items-center gap-2 mb-2 p-1 px-2 border-b border-black/30 cursor-pointer relative'>
+                <div className='h-[4rem] w-[4rem] rounded-full relative'>
+                    <div className={`absolute h-3 w-3 rounded-lg ${onlineUsers.includes(user._id)?"bg-green-600":"bg-zinc-600"} border border-white  right-1 bottom-1`}>                    
+                    </div>
                     {user.profilePic ?<img src={user.profilePic || "/avatar.png"} alt="" />: <img src={"/avatar.png"} alt="" />}
                 </div>
                 <div className='flex-grow h-full'>

@@ -3,18 +3,18 @@ import axiosInstance from "../lib/axios";
 import { IUser } from "../types";
 import { io, Socket } from "socket.io-client";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || ""
+const BASE_URL = import.meta.env.VITE_BASE_URL || "";
 
-type User = IUser
+type User = IUser;
 
 type AuthState = {
   authUser: User | null;
   isLoggingIn: boolean;
   isSigningUp: boolean;
   isUpdatingProfile: boolean;
-  isCheckingAuth:boolean
-  socket:Socket | null
-  onlineUsers: string[] 
+  isCheckingAuth: boolean;
+  socket: Socket | null;
+  onlineUsers: string[];
 };
 
 type AuthActions = {
@@ -23,18 +23,17 @@ type AuthActions = {
   setUpdatingProfile: (isUpdating: boolean) => void;
   setSigningUp: (isSigning: boolean) => void;
   setLoggingIn: (isLogging: boolean) => void;
-  connectSocket : () => void;
-  disconnectSocket : () => void;
-//   setCheckingAuth: ()=>void
+  connectSocket: () => void;
+  disconnectSocket: () => void;
 };
 
-export const useAuthStore = create<AuthState & AuthActions>((set,get) => ({
+export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   authUser: null,
   isLoggingIn: false,
   isSigningUp: false,
   isUpdatingProfile: false,
-  isCheckingAuth:true,
-  socket:null,
+  isCheckingAuth: true,
+  socket: null,
   onlineUsers: [],
 
   checkAuth: async () => {
@@ -44,8 +43,8 @@ export const useAuthStore = create<AuthState & AuthActions>((set,get) => ({
       get().connectSocket();
     } catch (error) {
       console.error("Error while checking auth:", error);
-    } finally{
-      set({isCheckingAuth:false})
+    } finally {
+      set({ isCheckingAuth: false });
     }
   },
 
@@ -62,30 +61,36 @@ export const useAuthStore = create<AuthState & AuthActions>((set,get) => ({
   setUpdatingProfile: (isUpdating) => set({ isUpdatingProfile: isUpdating }),
   setSigningUp: (isSigning) => set({ isSigningUp: isSigning }),
   setLoggingIn: (isLogging) => set({ isLoggingIn: isLogging }),
-  
-  connectSocket: ()=>{
-    const {authUser} = get()
-    if(!authUser || get().socket?.connected) return
-    const socket = io(BASE_URL,{
-      query:{
-        userId:authUser._id
-      }
-    })
-    socket.connect()
-    set({socket})
-    socket.on('getOnlineUsers',(userIds)=>{  
-        console.log("Online users "+userIds);
-              
-        set({onlineUsers:userIds})
-    })
+
+  connectSocket: () => {
+    const { authUser } = get();
+    if (!authUser || get().socket?.connected) return;
+
+    const socket = io(BASE_URL, {
+      query: {
+        userId: authUser._id,
+      },
+    });
+
+    socket.connect();
+
+    set({ socket });
+
+    socket.on('connect', () => {
+      console.log("Socket connected:", socket.id);
+    });
+
+    socket.on('getOnlineUsers', (userIds) => {
+      console.log("Online users:", userIds);
+      set({ onlineUsers: userIds });
+    });
   },
 
-  disconnectSocket:()=>{
-    const  {socket} = get()
-    if(socket?.connected){
-      socket.disconnect()
-      set({socket:null})
-    } 
-  
-  }
+  disconnectSocket: () => {
+    const { socket } = get();
+    if (socket?.connected) {
+      socket.disconnect();
+      set({ socket: null });
+    }
+  },
 }));

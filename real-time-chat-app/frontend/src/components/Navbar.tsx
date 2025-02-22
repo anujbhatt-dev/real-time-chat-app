@@ -14,7 +14,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center flex-grow">
         {/* Logo */}
         <div className="text-xl font-bold flex justify-center items-center gap-x-2">
-        <MessageCircle className="text-blue-500" size={32}/>
+        <MessageCircle className="text-blue-500 ml-4" size={32}/>
           <Link to="/" className="hover:text-primary">
             MyApp
           </Link>
